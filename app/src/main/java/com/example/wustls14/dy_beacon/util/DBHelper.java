@@ -33,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " _id integer PRIMARY KEY autoincrement, "
                 + " name text, "
                 + " age integer, "
+                + " position integer, "
                 + " phone text)";
 
         try {
@@ -47,7 +48,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean insertReord(String beaconName, int srlNo, String distance){
         try {
             // db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('" + beaconName + "', "+ srlNo +", "+distance+");" );
-            db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('" + beaconName + "', "+ srlNo +", '" + distance +"');" );
+            db.execSQL( "insert into " + TABLE_NAME + "(name, age, position, phone) values ('" + beaconName + "', "+ srlNo +", "+ 55 +", '" + distance +"');" );
             return true;
         } catch(Exception ex) {
             Log.e(TAG, "Exception in insert SQL", ex);

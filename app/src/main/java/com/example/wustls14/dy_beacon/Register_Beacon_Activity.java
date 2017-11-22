@@ -158,7 +158,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
             srlNo = Integer.parseInt(temp_srlNo);
             if (srlNo > 0 && distance != null) {
                 // 로그인 실행 =========================================================================================
-                login(beaconName,srlNo,distance);
+                login(beaconName,srlNo,distance,distance_number);
             } else if (srlNo > 0 && distance == null) {
                 Toast.makeText(this, "알람 설정 거리를 선택해 주세요.", Toast.LENGTH_SHORT).show();
             } else if(srlNo < 0) {
@@ -172,11 +172,11 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
     }
 
     // 로그인
-    private void login(String beaconName, int srlNo, String distance){
+    private void login(String beaconName, int srlNo, String distance, int distance_number){
         boolean isOpen = openDatabase();
         if (isOpen) {
-            if(dbHelper.insertReord(beaconName,srlNo,distance)){
-                Toast.makeText(this, "비콘이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+            if(dbHelper.insertRecord(beaconName,srlNo,distance_number,distance)){
+                Toast.makeText(this, "비콘이 등록되었습니다." + distance_number, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -214,6 +214,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
                     + " _id integer PRIMARY KEY autoincrement, "
                     + " name text, "
                     + " age integer, "
+                    + " position integer, "
                     + " phone text)";
 
             try {
@@ -224,9 +225,9 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
 
         }
 
-        public boolean insertReord(String beaconName, int srlNo, String distance){
+        public boolean insertRecord(String beaconName, int srlNo, int distance_number, String distance){
             try {
-                db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('" + beaconName + "', "+ srlNo +", '" + distance +"');" );
+                db.execSQL( "insert into " + TABLE_NAME + "(name, age, position, phone) values ('" + beaconName + "', "+ srlNo +", "+ distance_number +", '" + distance +"');" );
                 return true;
             } catch(Exception ex) {
                 U.getInstance().log("Exception in insert SQL");

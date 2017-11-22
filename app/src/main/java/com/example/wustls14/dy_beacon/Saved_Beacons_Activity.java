@@ -81,7 +81,7 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
     // 3. DB가 열려있다면 저장된 정보 가져온 후 아답터에 셋팅
     private void executeRawQueryParam() {
 
-        String SQL = "select name, age, phone " + " from " + TABLE_NAME;
+        String SQL = "select name, age, position, phone " + " from " + TABLE_NAME;
         // 아답터에 기존 정보를 전달하기 위해 리스트 만듬
 
 
@@ -93,7 +93,8 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
             c1.moveToNext();
             item.setBeaconName(c1.getString(0));
             item.setSrlNo(c1.getInt(1));
-            item.setDistance(c1.getString(2));
+            item.setDistance(c1.getString(3));
+            item.setDistance_number(c1.getShort(2));
             savedList.add(item);
             saved_recyclerView.setAdapter(adapter = new saveAdapter(this,savedList));
             saved_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -203,8 +204,8 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
                     int temp = savedList.get(position).getSrlNo();
                     String intent_srlNo = Integer.toString(temp);
                     intent.putExtra("srlNo", intent_srlNo);
-                    // 3. 설정 거리
-                    intent.putExtra("distance", savedList.get(position).getDistance());
+                    // 3. 설정 거리 (String 값으로 변환하여 전달)
+                    intent.putExtra("distance", savedList.get(position).getDistance_number());
                     startActivity(intent);
                     return true;
                 case R.id.delete_menu:

@@ -21,7 +21,7 @@ public class Modify_Data_Activity extends AppCompatActivity {
 
     String former_beaconName;
     String former_srlNo;
-    String former_distance;
+    int former_distance;
     String after_distance;
 
     @Override
@@ -43,11 +43,9 @@ public class Modify_Data_Activity extends AppCompatActivity {
         modify_srlNo.setText(former_srlNo);
 
         s = (Spinner)findViewById(R.id.modify_distance_spinner);
-        former_distance = intent.getExtras().getString("distance");
-//        for(int i=0; i<6; i++){
-//            if(s.ge;)
-//        }
-//        s.setSelection();
+        former_distance = intent.getExtras().getInt("distance");
+        s.setSelection(former_distance);
+
 
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
