@@ -1,5 +1,7 @@
 package com.example.wustls14.dy_beacon;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -93,7 +95,7 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
             item.setSrlNo(c1.getInt(1));
             item.setDistance(c1.getString(2));
             savedList.add(item);
-            saved_recyclerView.setAdapter(adapter = new saveAdapter(savedList));
+            saved_recyclerView.setAdapter(adapter = new saveAdapter(this,savedList));
             saved_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             saved_recyclerView.setItemAnimator(new DefaultItemAnimator());
         }
@@ -112,14 +114,17 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
         }
     }
 
+
+    //==========================================================================================================
     class saveAdapter extends RecyclerView.Adapter<saveAdapter.saveViewHolder>{
 
+        Context mContext;       // intent를 실행하기 위해서 필요
         public List<SavedBeacon_Model> test_list;
 
-        public saveAdapter(List<SavedBeacon_Model> test_list) {
+        public saveAdapter(Context mContext, List<SavedBeacon_Model> test_list) {
+            this.mContext = mContext;
             this.test_list = test_list;
         }
-
 
         @Override
         public saveViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -189,12 +194,19 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.modify_menu:
+                    // 수정 버튼 클릭시 수정페이지로 이동
+                    Intent intent = new Intent(mContext, Modify_Data_Activity.class);
+                    // 저장된 값 전달하기
+                    intent.putExtra("beaconName", savedList.get(position).getBeaconName());
+                    intent.putExtra("srlNo", savedList.get(position).getSrlNo());
+                    intent.putExtra("distance", savedList.get(position).getDistance());
+                    startActivity(intent);
+                    finish();
                     return true;
                 case R.id.delete_menu:
-                    if(deleteMethod(savedList.get(position).getBeaconName()))
+                    if(deleteMethod(savedList.get(position).getBeaconName()))   //  DB에서 삭제가 성공적으로 이루어지고나면 if문 실행
                     {
                         test_list.remove(position);
-
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, test_list.size());
                         Toast.makeText(getBaseContext()," 성공적으로 삭제되었습니다.",Toast.LENGTH_SHORT).show();

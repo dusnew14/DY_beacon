@@ -1,6 +1,8 @@
 package com.example.wustls14.dy_beacon.model;
 
-public class SavedBeacon_Model {
+import java.io.Serializable;
+
+public class SavedBeacon_Model implements Serializable{
 
     String beaconName;
     int srlNo;
