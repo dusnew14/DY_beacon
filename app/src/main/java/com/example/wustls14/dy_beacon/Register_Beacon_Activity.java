@@ -73,6 +73,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
     String temp_srlNo;
     int srlNo = 0;
     String distance;
+    int distance_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -197,11 +197,15 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
                     // 수정 버튼 클릭시 수정페이지로 이동
                     Intent intent = new Intent(mContext, Modify_Data_Activity.class);
                     // 저장된 값 전달하기
+                    // 1. 비콘 이름
                     intent.putExtra("beaconName", savedList.get(position).getBeaconName());
-                    intent.putExtra("srlNo", savedList.get(position).getSrlNo());
+                    // 2. 시리얼 번호 (String 값으로 변환하여 전달)
+                    int temp = savedList.get(position).getSrlNo();
+                    String intent_srlNo = Integer.toString(temp);
+                    intent.putExtra("srlNo", intent_srlNo);
+                    // 3. 설정 거리
                     intent.putExtra("distance", savedList.get(position).getDistance());
                     startActivity(intent);
-                    finish();
                     return true;
                 case R.id.delete_menu:
                     if(deleteMethod(savedList.get(position).getBeaconName()))   //  DB에서 삭제가 성공적으로 이루어지고나면 if문 실행

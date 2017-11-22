@@ -7,7 +7,7 @@ public class SavedBeacon_Model implements Serializable{
     String beaconName;
     int srlNo;
     String distance;
-    boolean isChecked;
+    int distance_number;
 
     public SavedBeacon_Model() {}
 
@@ -17,10 +17,11 @@ public class SavedBeacon_Model implements Serializable{
         this.distance = distance;
     }
 
-    public SavedBeacon_Model(String beaconName, int srlNo, boolean isChecked) {
+    public SavedBeacon_Model(String beaconName, int srlNo, String distance, int distance_number) {
         this.beaconName = beaconName;
         this.srlNo = srlNo;
-        this.isChecked = isChecked;
+        this.distance = distance;
+        this.distance_number = distance_number;
     }
 
     public String getBeaconName() {
@@ -43,12 +44,12 @@ public class SavedBeacon_Model implements Serializable{
 
     public void setDistance(String distance) {this.distance = distance;}
 
-    public boolean isChecked() {
-        return isChecked;
+
+    public int getDistance_number() {
+        return distance_number;
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setDistance_number(int distance_number) {
+        this.distance_number = distance_number;
     }
-
 }

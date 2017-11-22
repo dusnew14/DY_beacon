@@ -40,9 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="변경할 시리얼 번호를 입력하세요."
-                android:imeActionId="6"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
+                android:inputType="number"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -75,8 +73,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="비콘 정보 변경하기"
-            android:textStyle="bold" />
+            android:text="수정 완료"
+            android:textStyle="bold"
+            android:onClick="modify_clicked"/>
 
     </LinearLayout>
 
