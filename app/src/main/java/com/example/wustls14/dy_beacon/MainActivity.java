@@ -1,5 +1,6 @@
 package com.example.wustls14.dy_beacon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+// gitHub 수정 : http://webnautes.tistory.com/1057
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,9 +84,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            startActivity(new Intent(this, Register_Beacon_Activity.class));
         } else if (id == R.id.nav_gallery) {
-
+            startActivity(new Intent(this, Saved_Beacons_Activity.class));
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

@@ -12,6 +12,10 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +34,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name="com.perples.recosdk.RECOBeaconService" />
+
+        <activity
+            android:name=".Register_Beacon_Activity"
+            android:label="@string/title_activity_register__beacon_" />
+        <activity android:name=".Saved_Beacons_Activity"></activity>
     </application>
 
 </manifest>
