@@ -33,8 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " _id integer PRIMARY KEY autoincrement, "
                 + " name text, "
                 + " age integer, "
-                + " phone text, "
-                + " position integer)";
+                + " phone text)";
 
         try {
             db.execSQL(CREATE_SQL);
@@ -43,22 +42,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         Log.e(TAG, "inserting records.");
-
-
-//        try {
-//            db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('John', 20, '010-7788-1234');" );
-//            db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('Mike', 35, '010-8888-1111');" );
-//            db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('Sean', 26, '010-6677-4321');" );
-//        } catch(Exception ex) {
-//            Log.e(TAG, "Exception in insert SQL", ex);
-//        }
-
     }
 
-    public boolean insertReord(String beaconName, int srlNo, String distance, int distance_number){
+    public boolean insertReord(String beaconName, int srlNo, String distance){
         try {
             // db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('" + beaconName + "', "+ srlNo +", "+distance+");" );
-            db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone, position) values ('" + beaconName + "', "+ srlNo +", '"+ distance +", '" + distance_number +"');" );
+            db.execSQL( "insert into " + TABLE_NAME + "(name, age, phone) values ('" + beaconName + "', "+ srlNo +", '" + distance +"');" );
             return true;
         } catch(Exception ex) {
             Log.e(TAG, "Exception in insert SQL", ex);

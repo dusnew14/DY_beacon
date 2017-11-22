@@ -115,6 +115,8 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
                 if(s.getSelectedItemPosition()>=1){
 
                     distance = s.getSelectedItem().toString();
+                    // 선택된 값의 순서를 저장
+                    distance_number = s.getSelectedItemPosition();
                 }
 
             }
