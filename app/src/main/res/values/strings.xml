@@ -29,4 +29,9 @@
         <item>4m</item>
         <item>5m 이상</item>
     </string-array>
+
+
+    <string name="location_permission_granted">Location permission has been granted. RECO SDK can now work properly.</string>
+    <string name="location_permission_not_granted">Location permission for this application is denied. RECO SDK may not work properly.</string>
+    <string name="location_permission_rationale">Location permission is needed to monitor or range beacons.</string>
 </resources>

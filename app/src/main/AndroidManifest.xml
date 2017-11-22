@@ -40,7 +40,9 @@
         <activity
             android:name=".Register_Beacon_Activity"
             android:label="@string/title_activity_register__beacon_" />
-        <activity android:name=".Saved_Beacons_Activity"></activity>
+        <activity android:name=".Saved_Beacons_Activity" />
+        <activity android:name=".reco.RecoRangingActivity" />
+        <activity android:name=".Modify_Data_Activity"></activity>
     </application>
 
 </manifest>
