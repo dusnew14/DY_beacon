@@ -11,6 +11,7 @@ import com.example.wustls14.dy_beacon.R;
 import com.example.wustls14.dy_beacon.model.SavedBeacon_Model;
 import com.perples.recosdk.RECOBeacon;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -18,25 +19,33 @@ import java.util.List;
 
 public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Adapter.findViewHolder>{
 
-    private ArrayList<RECOBeacon> mRangedBeacons;
+
     public List<SavedBeacon_Model> savedBeacon_modelList;
+    public int itemLayout;
 
-
+    private ArrayList<RECOBeacon> mRangedBeacons;
+    private LayoutInflater mLayoutInflater;
 
     //===================================================================================================
-    // 생성자 1. 비콘용
-    public Find_MyBeacon_Adapter(List<SavedBeacon_Model> savedBeacon_modelList, ArrayList<RECOBeacon> mRangedBeacons) {
-        this.savedBeacon_modelList = savedBeacon_modelList;
-        mRangedBeacons = new ArrayList<RECOBeacon>();
-    }
-
-    // 생성자 2. 기본
-    public Find_MyBeacon_Adapter(List<SavedBeacon_Model> savedBeacon_modelList) { this.savedBeacon_modelList = savedBeacon_modelList;}
 
     public Find_MyBeacon_Adapter(Context context) {
         super();
         mRangedBeacons = new ArrayList<RECOBeacon>();
+        mLayoutInflater = LayoutInflater.from(context);
     }
+
+    public Find_MyBeacon_Adapter(List<SavedBeacon_Model> savedBeacon_modelList, int itemLayout) {
+        this.savedBeacon_modelList = savedBeacon_modelList;
+        this.itemLayout = itemLayout;
+    }
+
+    public Find_MyBeacon_Adapter(int itemLayout){this.itemLayout = itemLayout;}
+
+//    public Find_MyBeacon_Adapter(List<SavedBeacon_Model> savedBeacon_modelList, ArrayList<RECOBeacon> mRangedBeacons) {
+//        this.savedBeacon_modelList = savedBeacon_modelList;
+//        mRangedBeacons = new ArrayList<RECOBeacon>();
+//    }
+
 
     @Override
     public Find_MyBeacon_Adapter.findViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,19 +55,40 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
 
     @Override
     public void onBindViewHolder(Find_MyBeacon_Adapter.findViewHolder holder, int position) {
-        final SavedBeacon_Model item = savedBeacon_modelList.get(position);
+        SavedBeacon_Model item = savedBeacon_modelList.get(position);
+
         holder.find_name.setText("비콘 이름 : " + item.getBeaconName());
         holder.find_srlNo.setText("시리얼 번호 : " + item.getSrlNo());
-        holder.find_distance.setText(" " + item.getAccuracy());
-        holder.find_howFar.setText("테스트 작업 중");
+        holder.find_distance.setText("알람 설정 거리 : " + item.getDistance());
+        holder.find_howFar.setText("측정 거리 : " + item.getAccuracy());
+
+        holder.itemView.setTag(item);
     }
 
     @Override
     public int getItemCount() { return savedBeacon_modelList.size(); }
 
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
+
+
+
+    //  ViewHolder ==========================================================================================
+    public static class findViewHolder extends RecyclerView.ViewHolder{
+
+        public ImageView find_img;
+        public TextView find_name;
+        public TextView find_srlNo;
+        public TextView find_distance;
+        public TextView find_howFar;
+
+        public findViewHolder(View itemView) {
+            super(itemView);
+            find_img = (ImageView) itemView.findViewById(R.id.find_Img);
+            find_name = (TextView) itemView.findViewById(R.id.find_name_txt);
+            find_srlNo = (TextView) itemView.findViewById(R.id.find_srlNo_txt);
+            find_distance = (TextView) itemView.findViewById(R.id.find_distance_txt);
+            find_howFar = (TextView) itemView.findViewById(R.id.find_how_far_txt);
+
+        }
     }
 
     // RECO =================================================================================================
@@ -83,24 +113,11 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
         mRangedBeacons.clear();
     }
 
+    public int getCount(){return mRangedBeacons.size();}
 
-    //  ViewHolder ==========================================================================================
-    public class findViewHolder extends RecyclerView.ViewHolder{
+    public Object getItem(int position){return mRangedBeacons.get(position);}
 
-        public ImageView find_img;
-        public TextView find_name;
-        public TextView find_srlNo;
-        public TextView find_distance;
-        public TextView find_howFar;
+    @Override
+    public long getItemId(int position) { return position; }
 
-        public findViewHolder(View itemView) {
-            super(itemView);
-            find_img = (ImageView) itemView.findViewById(R.id.find_Img);
-            find_name = (TextView) itemView.findViewById(R.id.find_name_txt);
-            find_srlNo = (TextView) itemView.findViewById(R.id.find_srlNo_txt);
-            find_distance = (TextView) itemView.findViewById(R.id.find_distance_txt);
-            find_howFar = (TextView) itemView.findViewById(R.id.find_how_far_txt);
-
-        }
-    }
 }
