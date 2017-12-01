@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
             startActivity(new Intent(this, RecoRangingActivity.class));
         } else if (id == R.id.nav_manage) {
-
+            startActivity(new Intent(this, Find_MyBeacon_Activity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

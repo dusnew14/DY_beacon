@@ -35,7 +35,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wustls14.dy_beacon.util.DBHelper;
 import com.example.wustls14.dy_beacon.util.U;
 
 import java.util.ArrayList;
@@ -54,11 +53,11 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
     // Keep track of the login task to ensure we can cancel it if requested.
     private UserLoginTask mAuthTask = null;
 
-    private static String DATABASE_NAME = "DY_Beacon_DB";
-    private static String TABLE_NAME = "registered_Info_Table";
-    private static int DATABASE_VERSION = 1;
-    private DatabaseHelper dbHelper;
-    DBHelper helper;
+    public static String DATABASE_NAME = "DY_Beacon_DB";
+    public static String TABLE_NAME = "registered_Info_Table";
+    public static int DATABASE_VERSION = 1;
+    DatabaseHelper dbHelper;
+    //DBHelper helper;
     private SQLiteDatabase db;
 
     // UI references.
@@ -176,7 +175,8 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
         boolean isOpen = openDatabase();
         if (isOpen) {
             if(dbHelper.insertRecord(beaconName,srlNo,distance_number,distance)){
-                Toast.makeText(this, "비콘이 등록되었습니다." + distance_number, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "비콘이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                db.close();
             }
         }
     }
@@ -212,10 +212,10 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
 
             String CREATE_SQL = "create table " + TABLE_NAME + "("
                     + " _id integer PRIMARY KEY autoincrement, "
-                    + " name text, "
-                    + " age integer, "
-                    + " position integer, "
-                    + " phone text)";
+                    + " beaconName text, "
+                    + " srlNo integer, "
+                    + " distance_position integer, "
+                    + " distance text)";
 
             try {
                 db.execSQL(CREATE_SQL);
@@ -227,7 +227,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
 
         public boolean insertRecord(String beaconName, int srlNo, int distance_number, String distance){
             try {
-                db.execSQL( "insert into " + TABLE_NAME + "(name, age, position, phone) values ('" + beaconName + "', "+ srlNo +", "+ distance_number +", '" + distance +"');" );
+                db.execSQL( "insert into " + TABLE_NAME + "(_id, beaconName, srlNo, distance_position, distance) values ("+ null +", '"+ beaconName + "', "+ srlNo +", "+ distance_number +", '" + distance +"');" );
                 return true;
             } catch(Exception ex) {
                 U.getInstance().log("Exception in insert SQL");

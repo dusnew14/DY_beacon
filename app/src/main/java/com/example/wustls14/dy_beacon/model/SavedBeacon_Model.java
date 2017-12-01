@@ -4,10 +4,29 @@ import java.io.Serializable;
 
 public class SavedBeacon_Model implements Serializable{
 
+    String _id;
     String beaconName;
     int srlNo;
     String distance;
     int distance_number;
+    double accuracy;
+
+    public SavedBeacon_Model(String _id, String beaconName, int srlNo, String distance, int distance_number, double accuracy) {
+        this._id = _id;
+        this.beaconName = beaconName;
+        this.srlNo = srlNo;
+        this.distance = distance;
+        this.distance_number = distance_number;
+        this.accuracy = accuracy;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
 
     public SavedBeacon_Model() {}
 
@@ -17,11 +36,24 @@ public class SavedBeacon_Model implements Serializable{
         this.distance = distance;
     }
 
+
     public SavedBeacon_Model(String beaconName, int srlNo, String distance, int distance_number) {
         this.beaconName = beaconName;
         this.srlNo = srlNo;
         this.distance = distance;
         this.distance_number = distance_number;
+    }
+
+    public SavedBeacon_Model(String _id) {
+        this._id = _id;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getBeaconName() {

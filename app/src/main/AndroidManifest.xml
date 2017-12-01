@@ -42,8 +42,10 @@
             android:label="@string/title_activity_register__beacon_" />
         <activity android:name=".Saved_Beacons_Activity" />
         <activity android:name=".reco.RecoRangingActivity" />
-        <activity android:name=".Modify_Data_Activity"
-            android:label="비콘 정보 수정하기"></activity>
+        <activity
+            android:name=".Modify_Data_Activity"
+            android:label="비콘 정보 수정하기" />
+        <activity android:name=".Find_MyBeacon_Activity" />
     </application>
 
 </manifest>

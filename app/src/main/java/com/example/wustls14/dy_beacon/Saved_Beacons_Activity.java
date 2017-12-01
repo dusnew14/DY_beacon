@@ -81,7 +81,7 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
     // 3. DB가 열려있다면 저장된 정보 가져온 후 아답터에 셋팅
     private void executeRawQueryParam() {
 
-        String SQL = "select name, age, position, phone " + " from " + TABLE_NAME;
+        String SQL = "select _id, beaconName, srlNo, distance_position, distance " + " from " + TABLE_NAME;
         // 아답터에 기존 정보를 전달하기 위해 리스트 만듬
 
 
@@ -91,10 +91,11 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
         for (int i = 0; i < recordCount; i++) {
             SavedBeacon_Model item = new SavedBeacon_Model();
             c1.moveToNext();
-            item.setBeaconName(c1.getString(0));
-            item.setSrlNo(c1.getInt(1));
-            item.setDistance(c1.getString(3));
-            item.setDistance_number(c1.getShort(2));
+            item.set_id(c1.getString(0));
+            item.setBeaconName(c1.getString(1));
+            item.setSrlNo(c1.getInt(2));
+            item.setDistance(c1.getString(4));
+            item.setDistance_number(c1.getShort(3));
             savedList.add(item);
             saved_recyclerView.setAdapter(adapter = new saveAdapter(this,savedList));
             saved_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -102,12 +103,14 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
         }
         c1.close();
     }
+
     // 삭제버튼 클릭시 해당되는 데이터 DB에서 삭제
 
     public boolean deleteMethod(String id) {
         try {
             String[] whereArgs = {id};
-            db.delete(TABLE_NAME, "name = ?", whereArgs);
+            db.delete(TABLE_NAME, "beaconName = ?", whereArgs);
+            db.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -195,19 +198,26 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.modify_menu:
+
                     // 수정 버튼 클릭시 수정페이지로 이동
                     Intent intent = new Intent(mContext, Modify_Data_Activity.class);
-                    // 저장된 값 전달하기
-                    // 1. 비콘 이름
+
+                    // 저장된 값 전달하기===============================================================
+
+                    // 1. id값 전달 ------------------------- 아직 못함
+
+                    // 2. 비콘 이름
                     intent.putExtra("beaconName", savedList.get(position).getBeaconName());
-                    // 2. 시리얼 번호 (String 값으로 변환하여 전달)
+                    // 3. 시리얼 번호 (String 값으로 변환하여 전달)
                     int temp = savedList.get(position).getSrlNo();
                     String intent_srlNo = Integer.toString(temp);
                     intent.putExtra("srlNo", intent_srlNo);
-                    // 3. 설정 거리 (String 값으로 변환하여 전달)
+                    // 4. 설정 거리 (String 값으로 변환하여 전달)
                     intent.putExtra("distance", savedList.get(position).getDistance_number());
+                    finish();
                     startActivity(intent);
                     return true;
+
                 case R.id.delete_menu:
                     if(deleteMethod(savedList.get(position).getBeaconName()))   //  DB에서 삭제가 성공적으로 이루어지고나면 if문 실행
                     {
