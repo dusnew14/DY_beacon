@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.v4.app.AppLaunchChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wustls14.dy_beacon.adapter.Find_MyBeacon_Adapter;
+import com.example.wustls14.dy_beacon.model.AlarmModel;
 import com.example.wustls14.dy_beacon.model.SavedBeacon_Model;
 import com.example.wustls14.dy_beacon.reco.RecoActivity;
 import com.example.wustls14.dy_beacon.util.DBHelper;
@@ -42,6 +44,10 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
     Find_MyBeacon_Adapter adapter;
     ArrayList<RECOBeacon> temp_reco;
 
+    //스캔 기간 설정
+//    private long mScanPeriod1 = 60*60*1000L;
+//    private long mSleepPeriod1 = 60*60*1000L;
+
     // DB
     String DATABASE_NAME = "DY_Beacon_DB";
     String TABLE_NAME = "registered_Info_Table";
@@ -54,37 +60,43 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
     // 임시
     List<SavedBeacon_Model> result1;
 
+    // 알람을 위해 정확도를 넣는 리스트
+    List<AlarmModel> accuracy_list = new ArrayList<AlarmModel>();
+    // 알람을 위한 임시 리스트
+    List<AlarmModel> temp_accuracy;
+    boolean alarm;
+
     // 수정할 것=================================================================================================
-    TextView testText;
     SavedBeacon_Model item;
-    // DB와 reco의 공통된 부분만을 저장할 곳
-    List<SavedBeacon_Model> sameResultList;
-    // 수정할 것 =================================================================================================
+    TextView test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_my_beacon);
+        test = (TextView) findViewById(R.id.test);
 
         mRecoManager.setRangingListener(this);
         mRecoManager.bind(this);
+//        mRecoManager.setScanPeriod(mScanPeriod1);
+//        mRecoManager.setSleepPeriod(mSleepPeriod1);
         initLayout();
 
-        // 수정할 것 =================================================================================================
-        testText = (TextView)findViewById(R.id.test_txt);
-        sameResultList = new ArrayList<SavedBeacon_Model>();
-        // 수정할 것 =================================================================================================
+
 
     }
 
     private void initLayout(){find_recyclerView = (RecyclerView) findViewById(R.id.find_recyclerView);}
 
-    private List<SavedBeacon_Model> initData(ArrayList<RECOBeacon> temp_reco){
+    private List<AlarmModel> initData(ArrayList<RECOBeacon> temp_reco){
 
         // 1. 데이터 셋팅
         initData();
         // 2. 공통된 데이터를 저장해줄 곳 선언
         List<SavedBeacon_Model> beaconDataList = new ArrayList<SavedBeacon_Model>();
+
+        // 알람을 위한 선언
+        AlarmModel alarmModel;
 
         for (int i=0; i<result1.size(); i++){
             for (int j=0; j<temp_reco.size(); j++){
@@ -102,10 +114,27 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
                     SavedBeacon_Model beaconData = new SavedBeacon_Model();
                     beaconData.setBeaconName(result1.get(i).getBeaconName());
                     beaconData.setSrlNo(result1.get(i).getSrlNo());
+                    beaconData.setDistance(result1.get(i).getDistance());
                     beaconData.setAccuracy(temp_reco.get(j).getAccuracy());
                     beaconDataList.add(beaconData);
-                }
 
+                    if(temp_reco.get(j).getAccuracy() - 3 > 0){
+                        alarmModel = new AlarmModel(true);
+                    }
+                    else {
+                        alarmModel = new AlarmModel(false);
+                    }
+
+                    //알람 기능을 위한 데이터 저장
+                    if(accuracy_list.size()<30){
+                        accuracy_list.add(alarmModel);
+                    }
+                    else{
+                        accuracy_list.remove(0);
+                        accuracy_list.add(alarmModel);
+                    }
+
+                }
             }
         }
 
@@ -113,15 +142,69 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
         find_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         find_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        return null;
+        return accuracy_list;
     }
 
+    // DB 구축 및 View 셋팅 ============================================================================
+
+    // 1.DB 열기
+    private boolean openDatabase() {
+        try {
+            dbHelper = new DBHelper(this);
+            db = dbHelper.getWritableDatabase();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 2. DB가 열려있는지 확인
+    public void initData() {
+        adapter = new Find_MyBeacon_Adapter(this);
+        boolean isOpen = openDatabase();
+        // 3. 열려있다면 실행
+        if (isOpen) {
+            loadData();
+        }
+    }
+
+    // 4. reco가 작동되기 전에 DB에 있는 리스트를 저장
+    public void loadData(){
+
+        result1 = new ArrayList<SavedBeacon_Model>();  // DB에 저장된 정보를 담고 있는 리스트
+
+        String SQL = "select _id, beaconName, srlNo, distance_position, distance " + " from " + TABLE_NAME;
+        // 아답터에 기존 정보를 전달하기 위해 리스트 만듬
+
+
+        Cursor c1 = db.rawQuery(SQL, null);
+        int recordCount = c1.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
+            item  = new SavedBeacon_Model();
+            c1.moveToNext();
+            item.set_id(c1.getString(0));
+            item.setBeaconName(c1.getString(1));
+            item.setSrlNo(c1.getInt(2));
+            item.setDistance(c1.getString(4));
+            item.setDistance_number(c1.getShort(3));
+            result1.add(item);
+        }
+        c1.close();
+    }
+
+    // reco ========================================================================================
     @Override
     public void didRangeBeaconsInRegion(Collection<RECOBeacon> recoBeacons, RECOBeaconRegion recoRegion) {
         temp_reco = adapter.updateAllBeacons(recoBeacons);
         adapter.notifyDataSetChanged();
-        // did 메소드가 매번 실행될 때마다 아래 메소드가 실행되서 문제임
-        initData(temp_reco);
+        temp_accuracy = initData(temp_reco);
+
+       // 알람리스트에 최소 데이터가 5개이상 있을 경우 알람작동하도록 함
+        if(temp_accuracy.size()==5){
+            check(temp_accuracy);
+        }
     }
 
     @Override
@@ -190,146 +273,43 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
     public void rangingBeaconsDidFailForRegion(RECOBeaconRegion region, RECOErrorCode errorCode) {return;}
 
 
+    // 알람 =======================================================================================
 
-
-    // 수정할 것 ↓↓↓↓↓↓=================================================================================================
-
-    // DB 구축 및 View 셋팅 =================================
-
-    // 1.DB 열기
-    private boolean openDatabase() {
-        try {
-            dbHelper = new DBHelper(this);
-            db = dbHelper.getWritableDatabase();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // 2. DB가 열려있는지 확인
-    public void initData() {
-        adapter = new Find_MyBeacon_Adapter(this);
-        boolean isOpen = openDatabase();
-        // 3. 열려있다면 실행
-        if (isOpen) {
-            loadData();
-        }
-    }
-
-    // 4. reco가 작동되기 전에 DB에 있는 리스트를 저장
-    public void loadData(){
-
-        result1 = new ArrayList<SavedBeacon_Model>();  // DB에 저장된 정보를 담고 있는 리스트
-
-        String SQL = "select _id, beaconName, srlNo, distance_position, distance " + " from " + TABLE_NAME;
-        // 아답터에 기존 정보를 전달하기 위해 리스트 만듬
-
-
-        Cursor c1 = db.rawQuery(SQL, null);
-        int recordCount = c1.getCount();
-
-        for (int i = 0; i < recordCount; i++) {
-            item  = new SavedBeacon_Model();
-            c1.moveToNext();
-            item.set_id(c1.getString(0));
-            item.setBeaconName(c1.getString(1));
-            item.setSrlNo(c1.getInt(2));
-            item.setDistance(c1.getString(4));
-            item.setDistance_number(c1.getShort(3));
-            result1.add(item);
-        }
-        c1.close();
-    }
-
-    // DB 구축 및 View 셋팅 ==================================
-
-
-
-//    // DB가 열려있다면 저장된 정보 가져온 후 아답터에 셋팅 -> reco 용으로 만들기
-//    private void executeRawQueryParam(ArrayList<RECOBeacon> temp_reco) {
-//
-//        for (int j= 0; j < temp_reco.size(); j++) {
-//            for (int i = 0; i<result1.size(); i++) {
-//
-//                // 시리얼 번호 생성
-//                int major = temp_reco.get(j).getMajor();
-//                String numStr1 = String.valueOf(major);
-//                int minor = temp_reco.get(j).getMinor();
-//                String numStr2 = String.valueOf(minor);
-//                String srlNo = major + "0" + minor;
-//                //int real_srlNo = Integer.parseInt(srlNo);
-//
-//                int items_value = result1.get(i).getSrlNo();
-//
-//                String item_str = String.valueOf(items_value);
-//                String item_name =result1.get(i).getBeaconName();
-//
-//                /**
-//                 * 반복 셋팅을 막기 위해서 검사
-//                 * reco는 주기적으로 계속 탐색되므로
-//                 * 한번 탐색되어 저장된 것이 현재 탐색된 비콘과 같으면 저장하지 못하게 함
-//                 */
-//
-//
-//
-//
-//                if(!(sameResultList.isEmpty())){
-//                    for(int k=0; k<sameResultList.size(); k++){
-//
-//                        String confrim_srlNo = String.valueOf(sameResultList.get(k).getSrlNo());
-//
-//                        if(!(sameResultList.get(k).getBeaconName().equals(item_name))
-//                                && !(item_str.equals(sameResultList.get(k).getSrlNo()))){
-//
-//                            SavedBeacon_Model item2 = new SavedBeacon_Model();
-//                            item2.setBeaconName(result1.get(i).getBeaconName());
-//                            item2.setSrlNo(result1.get(i).getSrlNo());
-//                            item2.setDistance(result1.get(i).getDistance());
-//                            item2.setDistance_number(result1.get(i).getDistance_number());
-//                            sameResultList.add(item2);
-//                        }
-//                    }
-//                }
-//
-//                 sameResultList.isEmpty() &&
-//
-//
-//                if ( item_str.equals(srlNo)) {
-//
-//                    SavedBeacon_Model item2 = new SavedBeacon_Model();
-//                    item2.setBeaconName(result1.get(i).getBeaconName());
-//                    item2.setSrlNo(result1.get(i).getSrlNo());
-//                    item2.setAccuracy(temp_reco.get(j).getAccuracy());
-//                    item2.setDistance(result1.get(j).getDistance());
-//                    sameResultList.add(item2);
-//                }
-//            }
-//        }
-//        find_recyclerView.setAdapter(adapter = new Find_MyBeacon_Adapter(sameResultList, R.layout.item_find_beacon_layout));
-//        find_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-//        find_recyclerView.setItemAnimator(new DefaultItemAnimator());
-//
-//
-//    }
-
-
-    // reco ========================================================================================
-
-
-    // 버튼을 누르면 알람이 재생됨 : 테스트용 =============================================================== 삭제
-    public void playBtn(View view){
-        playAalarm();
-    }
-
-    public void playAalarm(){
+    public void playAlarm(){
         int soundID = sp.load(this,R.raw.alarm,1);
-
         sp.play(soundID,1,1,0,0,0.5f);
     }
 
-    // 수정할 것 =================================================================================================
+
+    public void check(List<AlarmModel> temp_accuracy){
+
+        for (int i=0; i<temp_accuracy.size(); i++){
+            for(int j=i+1; j<temp_accuracy.size(); j++){
+                if(temp_accuracy.get(i).isAlarmtest()== temp_accuracy.get(j).isAlarmtest()){
+                    if(temp_accuracy.get(j).isAlarmtest()==false){
+                        test.setText("3m 안으로 들어옴 : " + i  + ", " + j + " " + temp_accuracy.get(j).isAlarmtest());
+                        //playAlarm();
+                        break;
+                    }
+                }
+                if(temp_accuracy.get(i).isAlarmtest()==false){
+                    if(temp_accuracy.get(j).isAlarmtest()==true){
+                        test.setText("3m 밖에 나감  : " + i  + ", " + j + " " + temp_accuracy.get(j).isAlarmtest());
+                        //playAlarm();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void playBtn(View view){
+        playAlarm();
+    }
+
+
+
+
 
 
 

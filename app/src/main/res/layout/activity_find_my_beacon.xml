@@ -7,17 +7,20 @@
     android:orientation="vertical"
     tools:context="com.example.wustls14.dy_beacon.Find_MyBeacon_Activity">
 
+
     <TextView
-        android:id="@+id/test_txt"
+        android:id="@+id/test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="25sp"
-        android:text="테스트"/>
+        android:text="설정 값"/>
+
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:text="알람 재생"
         android:onClick="playBtn"/>
@@ -29,5 +32,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         tools:listitem="@layout/item_find_beacon_layout"/>
+
+
+
+
+
+
 
 </LinearLayout>

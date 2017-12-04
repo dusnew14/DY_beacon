@@ -39,13 +39,6 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
         this.itemLayout = itemLayout;
     }
 
-    public Find_MyBeacon_Adapter(int itemLayout){this.itemLayout = itemLayout;}
-
-//    public Find_MyBeacon_Adapter(List<SavedBeacon_Model> savedBeacon_modelList, ArrayList<RECOBeacon> mRangedBeacons) {
-//        this.savedBeacon_modelList = savedBeacon_modelList;
-//        mRangedBeacons = new ArrayList<RECOBeacon>();
-//    }
-
 
     @Override
     public Find_MyBeacon_Adapter.findViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -67,9 +60,6 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
 
     @Override
     public int getItemCount() { return savedBeacon_modelList.size(); }
-
-
-
 
     //  ViewHolder ==========================================================================================
     public static class findViewHolder extends RecyclerView.ViewHolder{
