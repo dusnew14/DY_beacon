@@ -11,6 +11,8 @@ import com.example.wustls14.dy_beacon.R;
 import com.example.wustls14.dy_beacon.model.SavedBeacon_Model;
 import com.perples.recosdk.RECOBeacon;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -52,8 +54,13 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
 
         holder.find_name.setText("비콘 이름 : " + item.getBeaconName());
         holder.find_srlNo.setText("시리얼 번호 : " + item.getSrlNo());
-        holder.find_distance.setText("알람 설정 거리 : " + item.getDistance());
-        holder.find_howFar.setText("측정 거리 : " + item.getAccuracy());
+        holder.find_distance.setText("알람 설정 거리 : " + item.getDistance() + "m");
+        holder.find_accuracy.setText("정확도 : " + item.getAccuracy());
+
+        if(item.getAccuracy()>item.getDistance_double())
+            {holder.find_howFar.setText("멀리 있다.");}
+        else
+            holder.find_howFar.setText("가까이에 있다.");
 
         holder.itemView.setTag(item);
     }
@@ -68,7 +75,9 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
         public TextView find_name;
         public TextView find_srlNo;
         public TextView find_distance;
+        public TextView find_accuracy;
         public TextView find_howFar;
+
 
         public findViewHolder(View itemView) {
             super(itemView);
@@ -76,6 +85,7 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
             find_name = (TextView) itemView.findViewById(R.id.find_name_txt);
             find_srlNo = (TextView) itemView.findViewById(R.id.find_srlNo_txt);
             find_distance = (TextView) itemView.findViewById(R.id.find_distance_txt);
+            find_accuracy = (TextView) itemView.findViewById(R.id.find_accuracy_txt);
             find_howFar = (TextView) itemView.findViewById(R.id.find_how_far_txt);
 
         }

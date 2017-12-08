@@ -47,6 +47,15 @@
             android:text="설정된 알람 거리" />
 
         <TextView
+            android:id="@+id/find_accuracy_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="20sp"
+            android:text="정확도"/>
+
+        <TextView
             android:id="@+id/find_how_far_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

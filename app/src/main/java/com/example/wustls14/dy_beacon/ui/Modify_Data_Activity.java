@@ -1,4 +1,4 @@
-package com.example.wustls14.dy_beacon;
+package com.example.wustls14.dy_beacon.ui;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,9 +13,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wustls14.dy_beacon.R;
+import com.example.wustls14.dy_beacon.ui.Saved_Beacons_Activity;
 import com.example.wustls14.dy_beacon.util.DBHelper;
-
-import org.w3c.dom.Text;
 
 public class Modify_Data_Activity extends AppCompatActivity {
 
@@ -30,11 +30,9 @@ public class Modify_Data_Activity extends AppCompatActivity {
     int former_distance;
 
     // 이후에 저장된 값
-    String after_beaconName;
-    int after_srlNo;
     String after_distance;
+    double after_ditance_double;
     int after_distance_position;
-    String temp_srlNo;
 
     // DB 관련 정보
     private static String DATABASE_NAME = "DY_Beacon_DB";
@@ -77,6 +75,7 @@ public class Modify_Data_Activity extends AppCompatActivity {
                 if(s.getSelectedItemPosition()>=1){
 
                     after_distance = s.getSelectedItem().toString();
+                    after_ditance_double = Double.parseDouble(after_distance);
                     after_distance_position = s.getSelectedItemPosition();
                 }
             }
@@ -90,12 +89,6 @@ public class Modify_Data_Activity extends AppCompatActivity {
 
 
     public void modify_clicked(View view){
-
-        //after_beaconName = modify_beaconNameView.getText().toString();
-        //after_srlNo = Integer.parseInt(modify_srlNoView.getText().toString());
-
-        //ModifyCheck();
-
         modifyDB();
     }
 
@@ -105,7 +98,7 @@ public class Modify_Data_Activity extends AppCompatActivity {
     private void modifyDB(){
         boolean isOpen = openDatabase();
         if (isOpen) {
-            String strSQL = "UPDATE "+ TABLE_NAME+ " SET beaconName = '"+ modify_beaconNameView.getText().toString()+"', srlNo = " + modify_srlNoView.getText().toString() +", distance_position = "+ after_distance_position +", distance = '" + after_distance +"' WHERE srlNo = "+ former_srlNo;
+            String strSQL = "UPDATE "+ TABLE_NAME+ " SET beaconName = '"+ modify_beaconNameView.getText().toString()+"', srlNo = " + modify_srlNoView.getText().toString() +", distance_position = "+ after_distance_position + ", distance_double = " +after_ditance_double+", distance = '" + after_distance +"' WHERE srlNo = "+ former_srlNo;
             db.execSQL(strSQL);
             }
         Toast.makeText(this, "비콘 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show();
@@ -119,52 +112,7 @@ public class Modify_Data_Activity extends AppCompatActivity {
         return true;
     }
 
-    // 수정버튼 누르기전에 체크
-    private void ModifyCheck() {
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // 창에 입력된 값 받아오기
-        after_beaconName =modify_beaconNameView.getText().toString();
-        temp_srlNo = modify_srlNoView.getText().toString();
-
-        // beaconName과 X, srlNo X -> beaconName에 포커스
-        if (TextUtils.isEmpty(after_beaconName) && TextUtils.isEmpty(temp_srlNo)) {
-            modify_beaconNameView.setError(getString(R.string.error_field_required));
-            modify_beaconNameView.requestFocus();
-        }
-        // beaconName O srlNo X -> srlNO에 포커스
-        else if (!(TextUtils.isEmpty(after_beaconName)) && TextUtils.isEmpty(temp_srlNo)) {
-            modify_srlNoView.setError(getString(R.string.error_field_required));
-            modify_srlNoView.requestFocus();
-        }
-
-        // 값이 모두 O -> 스피너 확인
-//        else if (!(TextUtils.isEmpty(after_beaconName)) && !(TextUtils.isEmpty(temp_srlNo))) {
-//            if (Integer.parseInt(temp_srlNo) > 0 && after_distance != null) {
-//                after_srlNo = Integer.parseInt(temp_srlNo);
-//                if(after_srlNo>0){
-//                    // 로그인 실행 =========================================================================================
-//                    modifyDB();
-//                }
-//                else
-//                {
-//                    Toast.makeText(this, "수정 버튼 클릭 실패", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//            else if (after_srlNo > 0 && after_distance == null) {
-//                Toast.makeText(this, "알람 설정 거리를 선택해 주세요.", Toast.LENGTH_SHORT).show();
-//            }
-//            else if(after_srlNo < 0) {
-//                Toast.makeText(this, "비콘 시리얼 번호가 잘못 되었습니다.", Toast.LENGTH_SHORT).show();
-//                // srlNoView.setError(getString(R.string.error_field_required));
-//                modify_srlNoView.requestFocus();
-//            }
-//        }
-    }
-
-    //==============================================================================================
+    //=========================================================================================================
 
 
     @Override

@@ -8,6 +8,7 @@ public class SavedBeacon_Model implements Serializable{
     String beaconName;
     int srlNo;
     String distance;
+    double distance_double;
     int distance_number;
     double accuracy;
 
@@ -44,6 +45,15 @@ public class SavedBeacon_Model implements Serializable{
         this.distance_number = distance_number;
     }
 
+    public SavedBeacon_Model(String beaconName, int srlNo, String distance, double distance_double, int distance_number, double accuracy) {
+        this.beaconName = beaconName;
+        this.srlNo = srlNo;
+        this.distance = distance;
+        this.distance_double = distance_double;
+        this.distance_number = distance_number;
+        this.accuracy = accuracy;
+    }
+
     public SavedBeacon_Model(String _id) {
         this._id = _id;
     }
@@ -76,12 +86,19 @@ public class SavedBeacon_Model implements Serializable{
 
     public void setDistance(String distance) {this.distance = distance;}
 
-
     public int getDistance_number() {
         return distance_number;
     }
 
     public void setDistance_number(int distance_number) {
         this.distance_number = distance_number;
+    }
+
+    public double getDistance_double() {
+        return distance_double;
+    }
+
+    public void setDistance_double(double distance_double) {
+        this.distance_double = distance_double;
     }
 }

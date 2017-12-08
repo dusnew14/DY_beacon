@@ -1,15 +1,18 @@
-package com.example.wustls14.dy_beacon;
+package com.example.wustls14.dy_beacon.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,9 +24,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wustls14.dy_beacon.R;
 import com.example.wustls14.dy_beacon.model.SavedBeacon_Model;
 import com.example.wustls14.dy_beacon.util.DBHelper;
-import com.example.wustls14.dy_beacon.util.U;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,7 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_beacons);
+
 
         // 초기화
         saved_recyclerView = (RecyclerView) findViewById(R.id.saved_recyclerView);
@@ -87,6 +91,8 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
 
         Cursor c1 = db.rawQuery(SQL, null);
         int recordCount = c1.getCount();
+
+        // beaconName, srlNo, distance_position, distance_int, distance)
 
         for (int i = 0; i < recordCount; i++) {
             SavedBeacon_Model item = new SavedBeacon_Model();
@@ -141,7 +147,7 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
             final SavedBeacon_Model item = test_list.get(position);
             holder.saved_name.setText("비콘 이름 : " + item.getBeaconName());
             holder.saved_srlNo.setText("시리얼 번호 : " + item.getSrlNo ());
-            holder.saved_distance.setText("알람 설정 거리 : " + item.getDistance());
+            holder.saved_distance.setText("알람 설정 거리 : " + item.getDistance() + "m");
             holder.imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

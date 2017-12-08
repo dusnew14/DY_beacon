@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.wustls14.dy_beacon.Saved_Beacons_Activity">
+    tools:context="com.example.wustls14.dy_beacon.ui.Saved_Beacons_Activity">
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/saved_recyclerView"
@@ -15,3 +16,4 @@
         tools:listitem="@layout/item_saved_beacon_layout" />
 
 </android.support.constraint.ConstraintLayout>
+

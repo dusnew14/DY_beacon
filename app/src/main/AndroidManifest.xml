@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -38,14 +38,16 @@
         <service android:name="com.perples.recosdk.RECOBeaconService" />
 
         <activity
-            android:name=".Register_Beacon_Activity"
+            android:name=".ui.Register_Beacon_Activity"
             android:label="@string/title_activity_register__beacon_" />
-        <activity android:name=".Saved_Beacons_Activity" />
+        <activity android:name=".ui.Saved_Beacons_Activity"
+            android:label="등록된 비콘 모두 보기"/>
         <activity android:name=".reco.RecoRangingActivity" />
         <activity
-            android:name=".Modify_Data_Activity"
+            android:name=".ui.Modify_Data_Activity"
             android:label="비콘 정보 수정하기" />
-        <activity android:name=".Find_MyBeacon_Activity" />
+        <activity android:name=".ui.Find_MyBeacon_Activity"
+            android:label="내 비콘 찾기"/>
     </application>
 
 </manifest>

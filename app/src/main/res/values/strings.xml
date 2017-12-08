@@ -23,11 +23,11 @@
     <!-- 내꺼 -->
     <string-array name="register_distance">
         <item>선택</item>
-        <item>1m</item>
-        <item>2m</item>
-        <item>3m</item>
-        <item>4m</item>
-        <item>5m 이상</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
 

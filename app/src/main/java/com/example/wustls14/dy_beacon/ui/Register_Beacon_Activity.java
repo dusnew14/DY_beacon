@@ -1,4 +1,4 @@
-package com.example.wustls14.dy_beacon;
+package com.example.wustls14.dy_beacon.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wustls14.dy_beacon.R;
 import com.example.wustls14.dy_beacon.util.U;
 
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
     String temp_srlNo;
     int srlNo = 0;
     String distance;
+    double distance_double;
     int distance_number;
 
     @Override
@@ -115,6 +117,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
 
                     distance = s.getSelectedItem().toString();
                     // 선택된 값의 순서를 저장
+                    distance_double= Double.parseDouble(distance);
                     distance_number = s.getSelectedItemPosition();
                 }
 
@@ -215,6 +218,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
                     + " beaconName text, "
                     + " srlNo integer, "
                     + " distance_position integer, "
+                    + " distance_double double, "
                     + " distance text)";
 
             try {
@@ -227,7 +231,7 @@ public class Register_Beacon_Activity extends AppCompatActivity implements Loade
 
         public boolean insertRecord(String beaconName, int srlNo, int distance_number, String distance){
             try {
-                db.execSQL( "insert into " + TABLE_NAME + "(_id, beaconName, srlNo, distance_position, distance) values ("+ null +", '"+ beaconName + "', "+ srlNo +", "+ distance_number +", '" + distance +"');" );
+                db.execSQL( "insert into " + TABLE_NAME + "(_id, beaconName, srlNo, distance_position, distance_double, distance) values ("+ null +", '"+ beaconName + "', "+ srlNo +", "+ distance_number +", " + distance_double + ", '"+ distance +"');" );
                 return true;
             } catch(Exception ex) {
                 U.getInstance().log("Exception in insert SQL");

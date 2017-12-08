@@ -1,4 +1,4 @@
-package com.example.wustls14.dy_beacon;
+package com.example.wustls14.dy_beacon.ui;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,8 +24,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.wustls14.dy_beacon.R;
 import com.example.wustls14.dy_beacon.reco.RecoRangingActivity;
-import com.perples.recosdk.RECORangingListener;
 
 // gitHub 수정 : http://webnautes.tistory.com/1057
 

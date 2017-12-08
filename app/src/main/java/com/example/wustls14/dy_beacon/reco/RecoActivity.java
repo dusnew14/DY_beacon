@@ -3,7 +3,7 @@ package com.example.wustls14.dy_beacon.reco;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.example.wustls14.dy_beacon.MainActivity;
+import com.example.wustls14.dy_beacon.ui.MainActivity;
 import com.perples.recosdk.RECOBeaconManager;
 import com.perples.recosdk.RECOBeaconRegion;
 import com.perples.recosdk.RECOServiceConnectListener;

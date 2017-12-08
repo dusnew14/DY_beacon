@@ -28,7 +28,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.example.wustls14.dy_beacon.MainActivity;
+import com.example.wustls14.dy_beacon.ui.MainActivity;
 import com.example.wustls14.dy_beacon.R;
 import com.perples.recosdk.RECOBeacon;
 import com.perples.recosdk.RECOBeaconRegion;
