@@ -7,12 +7,20 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,12 +33,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.wustls14.dy_beacon.R;
+import com.example.wustls14.dy_beacon.adapter.Find_MyBeacon_Adapter;
+import com.example.wustls14.dy_beacon.model.AlarmModel;
+import com.example.wustls14.dy_beacon.model.SavedBeacon_Model;
+import com.example.wustls14.dy_beacon.reco.RecoActivity;
 import com.example.wustls14.dy_beacon.reco.RecoRangingActivity;
+import com.example.wustls14.dy_beacon.util.DBHelper;
+import com.example.wustls14.dy_beacon.util.U;
+import com.perples.recosdk.RECOBeacon;
+import com.perples.recosdk.RECOBeaconRegion;
+import com.perples.recosdk.RECOErrorCode;
+import com.perples.recosdk.RECORangingListener;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 // gitHub 수정 : http://webnautes.tistory.com/1057
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
     // RECO ========================================================================================
     // RECO의 고정 UUID값
     public static final String RECO_UUID = "24DDF411-8CF1-440C-87CD-E368DAF9C93E";
@@ -95,6 +119,7 @@ public class MainActivity extends AppCompatActivity
                 Log.i("MainActivity", "The location permission (ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION) is already granted.");
             }
         }
+
         // =========================================================================================
     }
 
@@ -130,12 +155,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-    }
+   }
 
     //위치 권한 (ACCESS_COARSE_LOCATION 혹은 ACCESS_FINE_LOCATION)을 요청해야 합니다.
     private void requestLocationPermission() {
-        if(!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
             return;
         }
@@ -199,13 +223,16 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(this, Find_MyBeacon_Activity.class));
         } else if (id == R.id.nav_share) {
-
+            startActivity(new Intent(this, Main2Activity.class));
         } else if (id == R.id.nav_send) {
-
+            startActivity(new Intent(this, Main3Activity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    // ====================================================================================================
+
 }

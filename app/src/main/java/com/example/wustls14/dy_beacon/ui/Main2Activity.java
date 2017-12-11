@@ -1,10 +1,12 @@
 package com.example.wustls14.dy_beacon.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.RemoteException;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,9 +28,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingListener{
+public class Main2Activity extends RecoActivity implements RECORangingListener {
 
-    RecyclerView find_recyclerView;
+    RecyclerView test_recyclerView;
     Find_MyBeacon_Adapter adapter;
     ArrayList<RECOBeacon> temp_reco;
 
@@ -38,7 +40,7 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
     private SQLiteDatabase db;
 
     // 알람기능을 할 음악 재생 셋팅
-    final SoundPool sp = new SoundPool(1,AudioManager.STREAM_MUSIC,0);
+    final SoundPool sp = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
 
     // 임시
     List<SavedBeacon_Model> result1;
@@ -54,14 +56,13 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_my_beacon);
+        setContentView(R.layout.activity_main2);
 
         mRecoManager.setRangingListener(this);
         mRecoManager.bind(this);
-        initLayout();
     }
 
-    private void initLayout(){find_recyclerView = (RecyclerView) findViewById(R.id.find_recyclerView);}
+    private void initLayout(){test_recyclerView = (RecyclerView) findViewById(R.id.test_recyclerView);}
 
     private List<AlarmModel> initData(ArrayList<RECOBeacon> temp_reco){
 
@@ -93,7 +94,6 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
                     beaconData.setSrlNo(result1.get(i).getSrlNo());
                     beaconData.setDistance(result1.get(i).getDistance());
                     beaconData.setAccuracy(temp_accuracy);
-                    beaconData.setDistance_double(result1.get(i).getDistance_double());
                     beaconDataList.add(beaconData);
 
                     if(temp_reco.get(j).getAccuracy() - result1.get(i).getDistance_double() > 0){
@@ -116,9 +116,9 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
             }
         }
 
-        find_recyclerView.setAdapter(new Find_MyBeacon_Adapter(beaconDataList, R.layout.item_find_beacon_layout));
-        find_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        find_recyclerView.setItemAnimator(new DefaultItemAnimator());
+        test_recyclerView.setAdapter(new Find_MyBeacon_Adapter(beaconDataList, R.layout.item_find_beacon_layout));
+        test_recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        test_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         return accuracy_list;
     }
@@ -179,7 +179,7 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
         adapter.notifyDataSetChanged();
         temp_accuracy = initData(temp_reco);
 
-       // 알람 리스트에 최소 데이터가 5개 이상 있을 경우 알람 작동하도록 함
+        // 알람 리스트에 최소 데이터가 5개 이상 있을 경우 알람 작동하도록 함
         if(temp_accuracy.size()>5){
             check(temp_accuracy);
         }
@@ -196,6 +196,13 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
         super.onDestroy();
         this.stop(mRegions);
         this.unbind();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private void unbind() {
@@ -213,7 +220,6 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
         mRecoManager.setDiscontinuousScan(MainActivity.DISCONTINUOUS_SCAN);
         this.start(mRegions);
     }
-
     @Override
     protected void start(ArrayList<RECOBeaconRegion> regions) {
         for(RECOBeaconRegion region : regions) {
@@ -252,24 +258,27 @@ public class Find_MyBeacon_Activity extends RecoActivity implements RECORangingL
 
 
     // 알람 =======================================================================================
-    public void playAlarm(){
+    public boolean playAlarm(){
+        boolean is;
         int soundID = sp.load(this,R.raw.alarm,1);
         sp.play(soundID,1,1,0,0,0.5f);
+        is = true;
+        return  is;
     }
 
     public void check(List<AlarmModel> temp_accuracy){
 
-//        for (int i=1; i<temp_accuracy.size(); i++) {
-//
-//            if (temp_accuracy.get(i - 1).isAlarmtest() != temp_accuracy.get(i).isAlarmtest()) {
-//                playAlarm();
-//                i++;
-//            }
-//        }
+        for (int i=1; i<temp_accuracy.size(); i++) {
+
+            if (temp_accuracy.get(i - 1).isAlarmtest() != temp_accuracy.get(i).isAlarmtest()) {
+
+                if(playAlarm());
+                startActivity(new Intent(this, Find_MyBeacon_Activity.class));
+                //finish();
+
+            }
+        }
     }
-
-
-
 
 
 

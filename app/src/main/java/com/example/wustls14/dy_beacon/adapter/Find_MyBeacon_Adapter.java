@@ -57,10 +57,19 @@ public class Find_MyBeacon_Adapter extends RecyclerView.Adapter<Find_MyBeacon_Ad
         holder.find_distance.setText("알람 설정 거리 : " + item.getDistance() + "m");
         holder.find_accuracy.setText("정확도 : " + item.getAccuracy());
 
-        if(item.getAccuracy()>item.getDistance_double())
-            {holder.find_howFar.setText("멀리 있다.");}
-        else
-            holder.find_howFar.setText("가까이에 있다.");
+
+        if(item.getAccuracy()>item.getDistance_double()){
+            holder.find_howFar.setText("설정 거리보다 멀리 있다" );
+        }
+        else if(item.getAccuracy()<=item.getDistance_double()){
+            holder.find_howFar.setText("설정 거리보다 가까이에 있다" );
+        }
+
+
+//        if(item.getAccuracy()-item.getDistance()>0)
+//            {holder.find_howFar.setText("멀리 있다.");}
+//        else
+//            {holder.find_howFar.setText("가까이에 있다.");}
 
         holder.itemView.setTag(item);
     }

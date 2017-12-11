@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.example.wustls14.dy_beacon.R;
 import com.perples.recosdk.RECOBeacon;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,7 +21,6 @@ public class RecoRangingListAdapter extends BaseAdapter {
         mRangedBeacons = new ArrayList<RECOBeacon>();
         mLayoutInflater = LayoutInflater.from(context);
 
-        Log.i("DataMineAdapater", "사이즈느 얼마죠 : " + mRangedBeacons.size() );
     }
 
     public void updateBeacon(RECOBeacon beacon) {

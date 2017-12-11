@@ -92,8 +92,6 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
         Cursor c1 = db.rawQuery(SQL, null);
         int recordCount = c1.getCount();
 
-        // beaconName, srlNo, distance_position, distance_int, distance)
-
         for (int i = 0; i < recordCount; i++) {
             SavedBeacon_Model item = new SavedBeacon_Model();
             c1.moveToNext();
@@ -111,7 +109,6 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
     }
 
     // 삭제버튼 클릭시 해당되는 데이터 DB에서 삭제
-
     public boolean deleteMethod(String id) {
         try {
             String[] whereArgs = {id};
@@ -123,7 +120,6 @@ public class Saved_Beacons_Activity extends AppCompatActivity {
             return false;
         }
     }
-
 
     //==========================================================================================================
     class saveAdapter extends RecyclerView.Adapter<saveAdapter.saveViewHolder>{

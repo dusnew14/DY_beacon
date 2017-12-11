@@ -34,4 +34,14 @@
     <string name="location_permission_granted">Location permission has been granted. RECO SDK can now work properly.</string>
     <string name="location_permission_not_granted">Location permission for this application is denied. RECO SDK may not work properly.</string>
     <string name="location_permission_rationale">Location permission is needed to monitor or range beacons.</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="interstitial_ad_sample">Interstitial Ad Sample</string>
+    <string name="start_level">Level 1</string>
+    <string name="next_level">Next Level</string>
+    <!-- -
+        This is an ad unit ID for an interstitial test ad. Replace with your own interstitial ad unit id.
+        For more information, see https://support.google.com/admob/answer/3052638
+    <!- -->
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

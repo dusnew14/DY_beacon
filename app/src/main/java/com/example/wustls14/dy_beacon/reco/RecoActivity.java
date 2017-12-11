@@ -1,7 +1,7 @@
 package com.example.wustls14.dy_beacon.reco;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.wustls14.dy_beacon.ui.MainActivity;
 import com.perples.recosdk.RECOBeaconManager;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *Monitoring 이나 ranging을 단일 클래스로 구성하고 싶으시다면,이 클래스를 삭제하시고 필요한 메소드와 RECOServiceConnectListener를 해당 클래스에서 구현하시기 바랍니다.
  */
 
-public abstract class RecoActivity extends Activity implements RECOServiceConnectListener {
+public abstract class RecoActivity extends AppCompatActivity implements RECOServiceConnectListener {
 
     protected RECOBeaconManager mRecoManager;
     protected ArrayList<RECOBeaconRegion> mRegions;

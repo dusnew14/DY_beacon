@@ -8,9 +8,7 @@ import android.util.Log;
 public class U {
 
     private static final U ourInstance = new U();
-    public static U getInstance() {
-        return ourInstance;
-    }
+    public static U getInstance() {return ourInstance;}
     private U() {}
 
     // 로그 출력
